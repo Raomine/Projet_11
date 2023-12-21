@@ -1,5 +1,4 @@
-import Header from "../containers/User-header.js";
-import Footer from "../containers/Footer.js";
+import Header from "../components/User-header.js";
 
 function User() {
   const accounts = [
@@ -48,7 +47,6 @@ function User() {
           </section>
         ))}
       </main>
-      <Footer />
     </>
   );
 }

@@ -1,10 +1,6 @@
-import Header from "../containers/Header.js";
-import Footer from "../containers/Footer.js";
-
 function Sign() {
   return (
     <>
-      <Header />
       <main className="main bg-dark">
         <section className="sign-in-content">
           <i className="fa fa-user-circle sign-in-icon"></i>
@@ -26,7 +22,6 @@ function Sign() {
           </form>
         </section>
       </main>
-      <Footer />
 
       <script></script>
     </>

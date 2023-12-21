@@ -1,11 +1,9 @@
-import "./App.css";
-import Header from "./containers/Header.js";
-import Footer from "./containers/Footer.js";
-import ChatIcon from "./img/icon-chat.png";
-import MoneyIcon from "./img/icon-money.png";
-import SecurityIcon from "./img/icon-security.png";
+import "./index.css";
+import ChatIcon from "../../asset/icon-chat.png";
+import MoneyIcon from "../../asset/icon-money.png";
+import SecurityIcon from "../../asset/icon-security.png";
 
-function App() {
+function Index() {
   const features = [
     {
       imageSrc: ChatIcon,
@@ -28,7 +26,6 @@ function App() {
 
   return (
     <>
-      <Header />
       <main>
         <div className="hero">
           <section className="hero-content">
@@ -56,9 +53,8 @@ function App() {
           ))}
         </section>
       </main>
-      <Footer />
     </>
   );
 }
 
-export default App;
+export default Index;

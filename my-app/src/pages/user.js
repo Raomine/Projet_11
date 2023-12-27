@@ -1,12 +1,34 @@
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+
 function Header() {
+  const [users, setUsers] = useState([]);
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const response = await axios.get("https://mk3smj-3001.csb.app/users");
+        setUsers(response.data);
+      } catch (error) {
+        console.error("Error fetching users:", error.message);
+      }
+    };
+
+    fetchUsers();
+  }, []);
+
   return (
     <div className="header">
-      <h1>
-        Welcome back
-        <br />
-        Tony Jarvis!
-      </h1>
-      <button className="edit-button">Edit Name</button>
+      {users.length > 0 && ( // Check if users array is not empty
+        <>
+          <h1>
+            Welcome back
+            <br />
+            {users[0].firstName} {users[0].lastName} !
+          </h1>
+          <button className="edit-button">Edit Name</button>
+        </>
+      )}
     </div>
   );
 }
@@ -52,12 +74,7 @@ function User() {
       <Header />
       <h2 className="sr-only">Accounts</h2>
       {ACCOUNTS.map((account) => (
-        <Accounts
-          key={account.id}
-          title={account.title}
-          amount={account.amount}
-          description={account.description}
-        />
+        <Accounts key={account.id} {...account} />
       ))}
     </main>
   );

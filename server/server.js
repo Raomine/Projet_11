@@ -5,8 +5,6 @@ const swaggerUi = require("swagger-ui-express");
 const yaml = require("yamljs");
 const swaggerDocs = yaml.load("./swagger.yaml");
 const dbConnection = require("./database/connection");
-// Importez le modèle User
-const User = require("./database/models/userModel"); // Assurez-vous que le chemin est correct
 
 dotEnv.config();
 
@@ -25,33 +23,6 @@ app.use(express.urlencoded({ extended: true }));
 
 // Handle custom routes
 app.use("/user", require("./routes/userRoutes")); // ...
-
-// Route pour récupérer tous les utilisateurs
-app.get("/users", async (req, res) => {
-  try {
-    const users = await User.find();
-    res.json(users);
-  } catch (error) {
-    console.error("Error fetching users:", error.message);
-    res.status(500).json({ error: "Internal Server Error" });
-  }
-});
-
-app.post("/users", async (req, res) => {
-  const { userName, password } = req.body;
-  // Ici, vous devrez interroger votre base de données MongoDB pour vérifier les informations d'identification
-  // Remplacez cela par la logique spécifique de votre application
-
-  const user = await User.findOne({ userName, password });
-  if (user) {
-    // Valid credentials
-    res.json({ success: true, message: "Login successful" });
-  } else {
-    // Invalid credentials
-    console.log(`Login failed for username: ${userName}`);
-    res.status(404).json({ success: false, message: "Invalid credentials" });
-  }
-});
 
 // API Documentation
 if (process.env.NODE_ENV !== "production") {

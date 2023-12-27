@@ -1,34 +1,11 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
-
 function Header() {
-  const [users, setUsers] = useState([]);
-
-  useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        const response = await axios.get("https://mk3smj-3001.csb.app/users");
-        setUsers(response.data);
-      } catch (error) {
-        console.error("Error fetching users:", error.message);
-      }
-    };
-
-    fetchUsers();
-  }, []);
-
   return (
     <div className="header">
-      {users.length > 0 && ( // Check if users array is not empty
-        <>
-          <h1>
-            Welcome back
-            <br />
-            {users[0].firstName} {users[0].lastName} !
-          </h1>
-          <button className="edit-button">Edit Name</button>
-        </>
-      )}
+      <h1>
+        Welcome back
+        <br />!
+      </h1>
+      <button className="edit-button">Edit Name</button>
     </div>
   );
 }

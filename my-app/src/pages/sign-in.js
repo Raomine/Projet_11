@@ -1,58 +1,30 @@
-import React, { useState } from "react";
-import axios from "axios";
-import { Navigate } from "react-router-dom";
 import { useAuth } from "../components/AuthContext";
+import { login } from "../components/auth";
 
 function Form() {
-  const [userName, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [signInSuccess, setSignInSuccess] = useState(false);
-  const { login } = useAuth();
+  const { log } = useAuth();
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleSignIn = async (event) => {
+    event.preventDefault();
 
-    try {
-      const response = await axios.post("https://mk3smj-3001.csb.app/users", {
-        userName,
-        password,
-      });
+    // Get username and password from form inputs (you may use state or refs)
+    const username = document.getElementById("username").value;
+    const password = document.getElementById("password").value;
 
-      if (response.data.success) {
-        // Set signInSuccess to true (optional, depending on your needs)
-        setSignInSuccess(true);
-        login(); // Appeler la fonction de connexion ici
-      } else {
-        console.error("Login failed:", response.data.message);
-      }
-    } catch (error) {
-      console.error("Error during login:", error.message);
-    }
+    // Call the login function
+    await login(username, password);
   };
-
-  if (signInSuccess) {
-    return <Navigate to="/user" />;
-  }
+  log();
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSignIn}>
       <div className="input-wrapper">
         <label htmlFor="username">Username</label>
-        <input
-          type="text"
-          id="username"
-          value={userName}
-          onChange={(e) => setUsername(e.target.value)}
-        />
+        <input type="text" id="username" />
       </div>
       <div className="input-wrapper">
         <label htmlFor="password">Password</label>
-        <input
-          type="password"
-          id="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
+        <input type="password" id="password" />
       </div>
       <div className="input-remember">
         <input type="checkbox" id="remember-me" />

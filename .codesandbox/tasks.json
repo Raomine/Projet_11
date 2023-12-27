@@ -11,7 +11,10 @@
   "tasks": {
     "dev:server": {
       "name": "dev:server",
-      "command": "npm run dev:server"
+      "command": "npm run dev:server",
+      "preview": {
+        "port": 3001
+      }
     },
     "populate-db": {
       "name": "populate-db",

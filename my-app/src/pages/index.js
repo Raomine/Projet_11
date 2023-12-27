@@ -1,7 +1,7 @@
-import "./index.css";
-import ChatIcon from "../../asset/icon-chat.png";
-import MoneyIcon from "../../asset/icon-money.png";
-import SecurityIcon from "../../asset/icon-security.png";
+import "../index.css";
+import ChatIcon from "../asset/icon-chat.png";
+import MoneyIcon from "../asset/icon-money.png";
+import SecurityIcon from "../asset/icon-security.png";
 
 function Hero() {
   return (

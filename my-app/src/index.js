@@ -3,7 +3,7 @@ import ReactDOM from "react-dom/client";
 import "./index.css";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Layout from "./components/Layout";
-import Index from "./pages/index/index";
+import Index from "./pages/index";
 import Sign from "./pages/sign-in";
 import User from "./pages/user";
 import { AuthProvider } from "./components/AuthContext";

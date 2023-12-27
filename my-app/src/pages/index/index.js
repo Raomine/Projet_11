@@ -56,12 +56,7 @@ function Index() {
       <section className="features">
         <h2 className="sr-only">Features</h2>
         {FEATURES.map((feature) => (
-          <Features
-            key={feature.id}
-            imageUrl={feature.imageUrl}
-            title={feature.title}
-            text={feature.text}
-          />
+          <Features key={feature.id} {...feature} />
         ))}
       </section>
     </main>

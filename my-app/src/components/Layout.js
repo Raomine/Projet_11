@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import Logo from "../asset/argentBankLogo.png";
-import { useAuth } from "./AuthContext";
+import { useAuth } from "../services/AuthContext";
 
 const Layout = ({ children }) => {
   const { isLoggedIn, logout } = useAuth();

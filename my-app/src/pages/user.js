@@ -1,10 +1,15 @@
+import { useLocation } from "react-router-dom";
+
 function Header() {
+  const location = useLocation();
+  const { email } = location.state || {};
+
   return (
     <div className="header">
       <h1>
-        Welcome back
-        <br />!
+        Welcome back <br />!
       </h1>
+      {email && <p>Email: {email}</p>}
       <button className="edit-button">Edit Name</button>
     </div>
   );

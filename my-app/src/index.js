@@ -6,7 +6,7 @@ import Layout from "./components/Layout";
 import Index from "./pages/index";
 import Sign from "./pages/sign-in";
 import User from "./pages/user";
-import { AuthProvider } from "./components/AuthContext";
+import { AuthProvider } from "./services/AuthContext";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(

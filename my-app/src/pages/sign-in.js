@@ -8,19 +8,19 @@ function Form() {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [rememberMe, setRememberMe] = useState(false);
 
   const handleSignIn = async (event) => {
     event.preventDefault();
+
     try {
-      const response = await login(email, password);
-      const { email } = response; // Définir 'email' à partir de la réponse
-      log(email);
+      await login(email, password);
       navigate("/user");
+      log();
     } catch (error) {
-      console.error("La connexion a échoué :", error);
+      console.error("Login failed:", error);
     }
   };
-
   return (
     <form onSubmit={handleSignIn}>
       <div className="input-wrapper">
@@ -44,7 +44,12 @@ function Form() {
         />
       </div>
       <div className="input-remember">
-        <input type="checkbox" id="remember-me" />
+        <input
+          type="checkbox"
+          id="remember-me"
+          checked={rememberMe}
+          onChange={(e) => setRememberMe(e.target.checked)}
+        />
         <label htmlFor="remember-me">Remember me</label>
       </div>
       <button type="submit" className="sign-in-button">

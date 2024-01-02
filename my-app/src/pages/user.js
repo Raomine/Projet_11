@@ -1,15 +1,36 @@
-import { useLocation } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { userdata } from "../services/authUser";
 
 function Header() {
-  const location = useLocation();
-  const { email } = location.state || {};
+  const navigate = useNavigate();
+  const [token, setToken] = useState(localStorage.getItem("token"));
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+
+  useEffect(() => {
+    if (!token) {
+      navigate("/sign-in");
+    } else {
+      userdata(token)
+        .then((userData) => {
+          setFirstName(userData.firstName);
+          setLastName(userData.lastName);
+        })
+        .catch((error) => {
+          console.error(
+            "Échec de la récupération des données de l'utilisateur :",
+            error,
+          );
+        });
+    }
+  }, [token, navigate]);
 
   return (
     <div className="header">
       <h1>
-        Welcome back <br />!
+        Welcome back <br /> {firstName} {lastName} !
       </h1>
-      {email && <p>Email: {email}</p>}
       <button className="edit-button">Edit Name</button>
     </div>
   );

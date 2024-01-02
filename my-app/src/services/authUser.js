@@ -1,38 +1,36 @@
 const baseURL = `https://mk3smj-3001.csb.app`;
 
-export const signup = async (
-  email,
-  password,
-  firstName,
-  lastName,
-  userName,
-) => {
+export async function userdata(token) {
   try {
-    console.log("Sending signup request with data:", {
-      email,
-      password,
-      firstName,
-      lastName,
-      userName,
-    });
-
-    const response = await fetch(`${baseURL}/user/signup`, {
+    const response = await fetch(`${baseURL}/user/profile`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        email,
-        password,
-        firstName,
-        lastName,
-        userName,
-      }),
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     });
-
-    console.log("Response from server:", response);
-
-    // Reste du code...
+    if (!response.ok) {
+      throw new Error("Échec de la récupération des infos utilisateur.");
+    }
+    const data = await response.json();
+    if (
+      data &&
+      data.body &&
+      data.body.firstName &&
+      data.body.lastName &&
+      data.body.userName
+    ) {
+      const userData = {
+        firstName: data.body.firstName,
+        lastName: data.body.lastName,
+        userName: data.body.userName,
+      };
+      return userData;
+    } else {
+      throw new Error(
+        "La réponse du serveur ne contient pas d'infos utilisateur valide.",
+      );
+    }
   } catch (error) {
-    console.error("Error during signup:", error);
     return Promise.reject(error);
   }
-};
+}

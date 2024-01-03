@@ -291,3 +291,63 @@ body {
     width: 200px;
   }
 }
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal {
+  background: #fff;
+  padding: 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.modal h2 {
+  font-size: 1.5em;
+  margin-bottom: 20px;
+  color: #222;
+}
+
+.modal form {
+  display: flex;
+  flex-direction: column;
+}
+
+.modal label {
+  margin-bottom: 10px;
+  color: #222;
+}
+
+.modal input {
+  padding: 8px;
+  margin-bottom: 15px;
+  margin-left: 5px;
+}
+
+.modal button {
+  padding: 10px;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  font-size: 1em;
+}
+
+.modal button[type="submit"] {
+  width: 100%;
+  background-color: #28a745;
+  margin-top: 10px;
+}
+
+.modal button[type="button"] {
+  width: 100%;
+  background-color: #dc3545;
+  margin-right: 10px;
+}

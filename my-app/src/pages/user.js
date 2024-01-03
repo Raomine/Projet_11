@@ -1,21 +1,26 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { userdata } from "../services/authUser";
+import { getUserData } from "../services/authUser";
+import { update } from "../services/authProfile";
 
 function Header() {
   const navigate = useNavigate();
-  const [token, setToken] = useState(localStorage.getItem("token"));
+  const [token] = useState(localStorage.getItem("token"));
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
+  const [userName, setUserName] = useState("");
+  const [newUserName, setNewUserName] = useState(userName);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     if (!token) {
       navigate("/sign-in");
     } else {
-      userdata(token)
+      getUserData(token)
         .then((userData) => {
           setFirstName(userData.firstName);
           setLastName(userData.lastName);
+          setUserName(userData.userName);
         })
         .catch((error) => {
           console.error(
@@ -26,12 +31,77 @@ function Header() {
     }
   }, [token, navigate]);
 
+  const openModal = () => {
+    setIsModalOpen(true);
+    setNewUserName(userName);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
+  const save = (e) => {
+    e.preventDefault();
+    if (newUserName === "") {
+      return;
+    }
+    update(token, newUserName)
+      .then((updatedData) => {
+        setUserName(newUserName);
+        closeModal();
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
   return (
     <div className="header">
       <h1>
         Welcome back <br /> {firstName} {lastName} !
       </h1>
-      <button className="edit-button">Edit Name</button>
+      <button className="edit-button" onClick={openModal}>
+        Edit Name
+      </button>
+      {isModalOpen && (
+        <div className="modal-overlay">
+          <div className="modal">
+            <h2>Edit Name</h2>
+            <form onSubmit={save}>
+              <label htmlFor="userName">
+                New Username:
+                <input
+                  type="text"
+                  id="userName"
+                  name="userName"
+                  placeholder={userName}
+                  onChange={(e) => setNewUserName(e.target.value)}
+                />
+              </label>
+              <label htmlFor="firstName">First Name :</label>
+              <input
+                type="text"
+                id="firstName"
+                name="firstName"
+                placeholder={firstName}
+                disabled
+              />
+              <label htmlFor="lastName">Last Name :</label>
+              <input
+                type="text"
+                id="lastName"
+                name="lastName"
+                placeholder={lastName}
+                disabled
+              />
+              <button type="button" onClick={closeModal}>
+                Cancel
+              </button>
+              <button type="submit">Save</button>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

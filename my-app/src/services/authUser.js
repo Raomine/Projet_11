@@ -1,6 +1,6 @@
 const baseURL = `https://mk3smj-3001.csb.app`;
 
-export async function userdata(token) {
+export async function getUserData(token) {
   try {
     const response = await fetch(`${baseURL}/user/profile`, {
       method: "POST",

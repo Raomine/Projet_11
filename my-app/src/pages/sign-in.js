@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../services/AuthContext";
 import { login } from "../services/auth";
@@ -10,11 +10,30 @@ function Form() {
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
 
+  useEffect(() => {
+    const storedEmail = localStorage.getItem("rememberedEmail");
+    const storedRememberMe = localStorage.getItem("rememberedRememberMe");
+
+    if (storedEmail) {
+      setEmail(storedEmail);
+      setRememberMe(storedRememberMe === "true");
+    }
+  }, []);
+
   const handleSignIn = async (event) => {
     event.preventDefault();
 
     try {
       await login(email, password);
+
+      if (rememberMe) {
+        localStorage.setItem("rememberedEmail", email);
+        localStorage.setItem("rememberedRememberMe", rememberMe);
+      } else {
+        localStorage.removeItem("rememberedEmail");
+        localStorage.removeItem("rememberedRememberMe");
+      }
+
       navigate("/user");
       log();
     } catch (error) {

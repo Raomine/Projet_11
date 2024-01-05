@@ -1,35 +1,32 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { getUserData } from "../services/authUser";
-import { update } from "../services/authProfile";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { getUserData } from "../services/user";
+import { setToken, setUserData } from "../stores/user";
+//mport { update } from "../services/user";
+import Modal from "../contents/modal";
+//import { useSelector, useDispatch } from "react-redux";
+//import { setToken, setUserData } from "../stores/user";
 
 function Header() {
-  const navigate = useNavigate();
-  const [token] = useState(localStorage.getItem("token"));
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [userName, setUserName] = useState("");
-  const [newUserName, setNewUserName] = useState(userName);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  /* const dispatch = useDispatch();
+  const { token, userData } = useSelector((state) => state.user);
 
   useEffect(() => {
-    if (!token) {
-      navigate("/sign-in");
-    } else {
-      getUserData(token)
-        .then((userData) => {
-          setFirstName(userData.firstName);
-          setLastName(userData.lastName);
-          setUserName(userData.userName);
-        })
-        .catch((error) => {
-          console.error(
-            "Échec de la récupération des données de l'utilisateur :",
-            error,
-          );
-        });
-    }
-  }, [token, navigate]);
+    // Appel de votre fonction pour récupérer les données utilisateur
+    getUserData(token)
+      .then((data) => {
+        // Utilisation des actions pour mettre à jour l'état Redux
+        dispatch(setToken(userData.token));
+        dispatch(setUserData(userData.data));
+      })
+      .catch((error) => {
+        console.error(
+          "Erreur lors de la récupération des données utilisateur:",
+          error,
+        );
+      });
+  }, [dispatch, token]);*/
+  /*const [isModalOpen, setIsModalOpen] = useState(false);
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -54,54 +51,32 @@ function Header() {
         console.error(error);
       });
   };
-
+*/
   return (
     <div className="header">
+      <div>
+        <h1>User Data:</h1>
+        <p>Token: {token}</p>
+        <p>User Data: {JSON.stringify(userData)}</p>
+      </div>
       <h1>
-        Welcome back <br /> {firstName} {lastName} !
+        Welcome back <br /> !
       </h1>
+      {/*
       <button className="edit-button" onClick={openModal}>
         Edit Name
       </button>
       {isModalOpen && (
-        <div className="modal-overlay">
-          <div className="modal">
-            <h2>Edit Name</h2>
-            <form onSubmit={save}>
-              <label htmlFor="userName">
-                New Username:
-                <input
-                  type="text"
-                  id="userName"
-                  name="userName"
-                  placeholder={userName}
-                  onChange={(e) => setNewUserName(e.target.value)}
-                />
-              </label>
-              <label htmlFor="firstName">First Name :</label>
-              <input
-                type="text"
-                id="firstName"
-                name="firstName"
-                placeholder={firstName}
-                disabled
-              />
-              <label htmlFor="lastName">Last Name :</label>
-              <input
-                type="text"
-                id="lastName"
-                name="lastName"
-                placeholder={lastName}
-                disabled
-              />
-              <button type="button" onClick={closeModal}>
-                Cancel
-              </button>
-              <button type="submit">Save</button>
-            </form>
-          </div>
-        </div>
-      )}
+        <Modal
+          userName={userName}
+          firstName={firstName}
+          lastName={lastName}
+          newUserName={newUserName}
+          setNewUserName={setNewUserName}
+          closeModal={closeModal}
+          //save={save}
+        />
+      )}*/}
     </div>
   );
 }

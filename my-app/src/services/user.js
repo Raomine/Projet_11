@@ -1,5 +1,24 @@
 const baseURL = `https://mk3smj-3001.csb.app`;
 
+export async function getUserData(token) {
+  try {
+    const response = await fetch(`${baseURL}/user/profile`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Échec de la récupération des infos utilisateur.");
+    }
+
+    return response.json();
+  } catch (error) {
+    return Promise.reject(error);
+  }
+}
+
 export async function update(token, newUserName) {
   try {
     const response = await fetch(`${baseURL}/user/profile`, {

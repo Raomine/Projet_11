@@ -1,74 +1,52 @@
-import React, { useState, useEffect } from "react";
+import React, { useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../services/AuthContext";
 import { login } from "../services/auth";
+import { useDispatch } from "react-redux";
+import { setToken } from "../stores/user";
 
 function Form() {
-  const { log } = useAuth();
   const navigate = useNavigate();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [rememberMe, setRememberMe] = useState(false);
+  const dispatch = useDispatch();
+
+  const emailInputRef = useRef();
 
   useEffect(() => {
-    const storedEmail = localStorage.getItem("rememberedEmail");
-    const storedRememberMe = localStorage.getItem("rememberedRememberMe");
+    const email = JSON.parse(localStorage.getItem("remember-me"));
 
-    if (storedEmail) {
-      setEmail(storedEmail);
-      setRememberMe(storedRememberMe === "true");
+    if (emailInputRef.current) {
+      emailInputRef.current.value = email;
     }
   }, []);
 
   const handleSignIn = async (event) => {
     event.preventDefault();
 
-    try {
-      await login(email, password);
+    const formData = Object.fromEntries(new FormData(event.currentTarget));
 
-      if (rememberMe) {
-        localStorage.setItem("rememberedEmail", email);
-        localStorage.setItem("rememberedRememberMe", rememberMe);
-      } else {
-        localStorage.removeItem("rememberedEmail");
-        localStorage.removeItem("rememberedRememberMe");
-      }
+    try {
+      const userData = await login(formData.email, formData.password);
+
+      dispatch(setToken(userData.token));
+
+      localStorage.setItem("remember-me", JSON.stringify(formData.email));
 
       navigate("/user");
-      log();
-    } catch (error) {
-      console.error("Login failed:", error);
+    } catch (e) {
+      console.error(e);
     }
   };
   return (
     <form onSubmit={handleSignIn}>
       <div className="input-wrapper">
         <label htmlFor="email">Email</label>
-        <input
-          type="text"
-          id="username"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
+        <input type="text" name="email" ref={emailInputRef} required />
       </div>
       <div className="input-wrapper">
         <label htmlFor="password">Password</label>
-        <input
-          type="password"
-          id="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
+        <input type="password" name="password" required />
       </div>
       <div className="input-remember">
-        <input
-          type="checkbox"
-          id="remember-me"
-          checked={rememberMe}
-          onChange={(e) => setRememberMe(e.target.checked)}
-        />
+        <input type="checkbox" name="remember-me" />
         <label htmlFor="remember-me">Remember me</label>
       </div>
       <button type="submit" className="sign-in-button">

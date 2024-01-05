@@ -7,17 +7,12 @@ export const login = async (email, password) => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, password }),
     });
+
     if (!response.ok) {
-      throw new Error("Email ou mot de passe incorrect.");
+      throw new Error("Erreur lors de la connexion.");
     }
-    const data = await response.json();
-    if (data && data.body && data.body.token) {
-      const token = data.body.token;
-      localStorage.setItem("token", token);
-      return token;
-    } else {
-      throw new Error("token indéfini ou invalide");
-    }
+
+    return response.json();
   } catch (error) {
     return Promise.reject(error);
   }

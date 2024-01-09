@@ -1,36 +1,44 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { getUserData } from "../services/user";
-import { setToken, setUserData } from "../stores/user";
-//mport { update } from "../services/user";
+import { fetchUserData, updateUserName, setNewUserName } from "../stores/user";
 import Modal from "../contents/modal";
-//import { useSelector, useDispatch } from "react-redux";
-//import { setToken, setUserData } from "../stores/user";
 
 function Header() {
-  /* const dispatch = useDispatch();
-  const { token, userData } = useSelector((state) => state.user);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const token = useSelector((state) => state.user.token);
+  const newUserName = useSelector((state) => state.user.newUserName);
 
   useEffect(() => {
-    // Appel de votre fonction pour récupérer les données utilisateur
-    getUserData(token)
-      .then((data) => {
-        // Utilisation des actions pour mettre à jour l'état Redux
-        dispatch(setToken(userData.token));
-        dispatch(setUserData(userData.data));
-      })
+    if (!token) {
+      navigate("/sign-in");
+    } else if (token) {
+      dispatch(fetchUserData(token));
+    } else {
+      console.error("Token is undefined or null");
+    }
+  }, [dispatch, token]);
+
+  const userData = useSelector((state) => state.user.userData);
+  const firstName =
+    userData && userData.body ? `${userData.body.firstName}` : "";
+  const lastName = userData && userData.body ? `${userData.body.lastName}` : "";
+  const userName = userData && userData.body ? `${userData.body.userName}` : "";
+
+  const handleUpdateUserName = () => {
+    dispatch(updateUserName({ token, newUserName }))
+      .then(() => dispatch(fetchUserData(token)))
       .catch((error) => {
-        console.error(
-          "Erreur lors de la récupération des données utilisateur:",
-          error,
-        );
+        console.error("Error updating user name:", error);
       });
-  }, [dispatch, token]);*/
-  /*const [isModalOpen, setIsModalOpen] = useState(false);
+  };
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const openModal = () => {
+    dispatch(setNewUserName(""));
     setIsModalOpen(true);
-    setNewUserName(userName);
   };
 
   const closeModal = () => {
@@ -39,44 +47,37 @@ function Header() {
 
   const save = (e) => {
     e.preventDefault();
+
     if (newUserName === "") {
       return;
     }
-    update(token, newUserName)
-      .then((updatedData) => {
-        setUserName(newUserName);
-        closeModal();
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+    handleUpdateUserName();
+
+    closeModal();
   };
-*/
+
+  const handleNewUserName = (e) => {
+    dispatch(setNewUserName(e.target.value));
+  };
+
   return (
     <div className="header">
-      <div>
-        <h1>User Data:</h1>
-        <p>Token: {token}</p>
-        <p>User Data: {JSON.stringify(userData)}</p>
-      </div>
       <h1>
-        Welcome back <br /> !
+        Welcome back <br /> {firstName} {lastName} !
       </h1>
-      {/*
       <button className="edit-button" onClick={openModal}>
         Edit Name
       </button>
-      {isModalOpen && (
-        <Modal
-          userName={userName}
-          firstName={firstName}
-          lastName={lastName}
-          newUserName={newUserName}
-          setNewUserName={setNewUserName}
-          closeModal={closeModal}
-          //save={save}
-        />
-      )}*/}
+      <Modal
+        isModalOpen={isModalOpen}
+        closeModal={closeModal}
+        save={save}
+        newUserName={newUserName}
+        handleNewUserName={handleNewUserName}
+        userName={userName}
+        firstName={firstName}
+        lastName={lastName}
+      />
     </div>
   );
 }

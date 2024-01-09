@@ -25,8 +25,9 @@ function Form() {
 
     try {
       const userData = await login(formData.email, formData.password);
+      const token = userData.body.token;
 
-      dispatch(setToken(userData.token));
+      dispatch(setToken(token));
 
       localStorage.setItem("remember-me", JSON.stringify(formData.email));
 
@@ -35,6 +36,7 @@ function Form() {
       console.error(e);
     }
   };
+
   return (
     <form onSubmit={handleSignIn}>
       <div className="input-wrapper">

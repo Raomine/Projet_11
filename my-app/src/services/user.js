@@ -6,15 +6,18 @@ export async function getUserData(token) {
       method: "POST",
       headers: {
         Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
       },
     });
 
     if (!response.ok) {
-      throw new Error("Échec de la récupération des infos utilisateur.");
+      throw new Error(`Request failed with status ${response.status}`);
     }
 
-    return response.json();
+    const data = await response.json();
+    return data;
   } catch (error) {
+    console.error("Error fetching user data:", error);
     return Promise.reject(error);
   }
 }

@@ -101,6 +101,77 @@ paths:
           description: Invalid Fields
         '500':
           description: Internal Server Error
+  /user/accounts:
+    get:
+      security:
+        - Bearer: []
+      tags:
+        - Account Module
+      summary: Get all accounts
+      description: API for retrieving all accounts
+      responses:
+        '200':
+          description: Accounts retrieved successfully
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Account'
+        '500':
+          description: Internal Server Error
+  /user/accounts/{id}:
+    get:
+      security:
+        - Bearer: []
+      tags:
+        - Account Module
+      summary: Get account by ID
+      description: API for retrieving an account by ID
+      parameters:
+        - in: path
+          name: id
+          type: integer
+          required: true
+      responses:
+        '200':
+          description: Account retrieved successfully
+          schema:
+            $ref: '#/definitions/Account'
+        '404':
+          description: Account not found
+        '500':
+          description: Internal Server Error
+    put:
+      security:
+        - Bearer: []
+      tags:
+        - Account Module
+      summary: Update account by ID
+      description: API for updating an account by ID
+      parameters:
+        - in: path
+          name: id
+          type: integer
+          required: true
+        - in: body
+          name: body
+          description: Update account attributes
+          required: true
+          schema:
+            $ref: '#/definitions/AccountUpdate'
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Account updated successfully
+          schema:
+            $ref: '#/definitions/ApiResponse'
+        '400':
+          description: Invalid Fields
+        '404':
+          description: Account not found
+        '500':
+          description: Internal Server Error
+
 securityDefinitions:
   Bearer:
     type: apiKey
@@ -155,4 +226,24 @@ definitions:
     type: object
     properties:
       userName:
+        type: string
+  Account:
+    type: object
+    properties:
+      id:
+        type: integer
+      title:
+        type: string
+      amount:
+        type: string
+      description:
+        type: string
+  AccountUpdate:
+    type: object
+    properties:
+      title:
+        type: string
+      amount:
+        type: string
+      description:
         type: string

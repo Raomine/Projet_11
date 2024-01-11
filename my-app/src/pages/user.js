@@ -9,22 +9,16 @@ function Header() {
   const dispatch = useDispatch();
   const token = useSelector((state) => state.user.token);
   const newUserName = useSelector((state) => state.user.newUserName);
+  const userData = useSelector((state) => state.user.userData);
+  const { firstName, lastName, userName } = userData?.body || {};
 
   useEffect(() => {
     if (!token) {
       navigate("/sign-in");
-    } else if (token) {
-      dispatch(fetchUserData(token));
     } else {
-      console.error("Token is undefined or null");
+      dispatch(fetchUserData(token));
     }
-  }, [dispatch, token]);
-
-  const userData = useSelector((state) => state.user.userData);
-  const firstName =
-    userData && userData.body ? `${userData.body.firstName}` : "";
-  const lastName = userData && userData.body ? `${userData.body.lastName}` : "";
-  const userName = userData && userData.body ? `${userData.body.userName}` : "";
+  }, [dispatch, token, navigate]);
 
   const handleUpdateUserName = () => {
     dispatch(updateUserName({ token, newUserName }))

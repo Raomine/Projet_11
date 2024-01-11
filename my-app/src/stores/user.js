@@ -31,7 +31,6 @@ export const updateUserName = createAsyncThunk(
 const initialState = {
   token: null,
   userData: null,
-  isAuthenticated: false,
   isLoading: false,
   newUserName: "",
 };
@@ -42,15 +41,9 @@ export const userSlice = createSlice({
   reducers: {
     setToken: (state, action) => {
       state.token = action.payload;
-      state.isAuthenticated = true;
     },
     setUserData: (state, action) => {
       state.userData = action.payload;
-    },
-    signOut: (state) => {
-      state.token = null;
-      state.userData = null;
-      state.isAuthenticated = false;
     },
     setNewUserName: (state, action) => {
       state.newUserName = action.payload;
@@ -68,7 +61,6 @@ export const userSlice = createSlice({
       .addCase(fetchUserData.rejected, (state) => {
         state.isLoading = false;
       })
-      // Ajoutez les cas pour updateUserName ici
       .addCase(updateUserName.pending, (state) => {
         state.isLoading = true;
       })
@@ -84,8 +76,7 @@ export const userSlice = createSlice({
   },
 });
 
-export const { setToken, setUserData, signOut, setNewUserName } =
-  userSlice.actions;
+export const { setToken, setUserData, setNewUserName } = userSlice.actions;
 
 export const store = configureStore({
   reducer: {

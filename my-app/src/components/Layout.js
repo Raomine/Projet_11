@@ -1,15 +1,17 @@
 import { Link } from "react-router-dom";
 import Logo from "../asset/argentBankLogo.png";
 import { useDispatch, useSelector } from "react-redux";
-import { signOut } from "../stores/user";
+import { setToken } from "../stores/user";
 
 const Layout = ({ children }) => {
   const dispatch = useDispatch();
-  const isAuthenticated = useSelector((state) => state.user.isAuthenticated);
+  const token = useSelector((state) => state.user.token);
 
   const handleAuthClick = () => {
-    if (isAuthenticated) {
-      dispatch(signOut());
+    if (!token) {
+      dispatch(setToken(token));
+    } else {
+      dispatch(setToken(""));
     }
   };
 
@@ -31,7 +33,7 @@ const Layout = ({ children }) => {
             onClick={handleAuthClick}
           >
             <i className="fa fa-user-circle">
-              {isAuthenticated ? "Sign Out" : "Sign In"}
+              {token ? "Sign Out" : "Sign In"}
             </i>
           </Link>
         </div>

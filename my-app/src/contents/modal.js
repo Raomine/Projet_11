@@ -21,7 +21,7 @@ const Modal = ({
                 name="userName"
                 placeholder={userName}
                 value={newUserName}
-                onChange={handleNewUserName}
+                onChange={(e) => handleNewUserName(e.target.value)}
               />
             </label>
 

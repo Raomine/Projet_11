@@ -1,37 +1,42 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { fetchUserData, updateUserName, setNewUserName } from "../stores/user";
+import { useSelector } from "react-redux";
+import { getUserData, update } from "../services/user";
 import Modal from "../contents/modal";
 
 function Header() {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
   const token = useSelector((state) => state.user.token);
-  const newUserName = useSelector((state) => state.user.newUserName);
-  const userData = useSelector((state) => state.user.userData);
-  const { firstName, lastName, userName } = userData?.body || {};
+
+  const [user, setUser] = useState(null);
+  const [newUserName, setNewUserName] = useState("");
+
+  const { firstName, lastName, userName } = user?.body ?? {};
+
+  const isLoggedin = !!token;
 
   useEffect(() => {
-    if (!token) {
-      navigate("/sign-in");
-    } else {
-      dispatch(fetchUserData(token));
-    }
-  }, [dispatch, token, navigate]);
+    isLoggedin || navigate("/sign-in");
+  }, [isLoggedin]);
 
-  const handleUpdateUserName = () => {
-    dispatch(updateUserName({ token, newUserName }))
-      .then(() => dispatch(fetchUserData(token)))
-      .catch((error) => {
-        console.error("Error updating user name:", error);
-      });
+  useEffect(() => {
+    if (!token) return;
+    getUserData(token).then(setUser);
+  }, [token, getUserData]);
+
+  const handleUpdateUserName = async () => {
+    try {
+      await update(token, newUserName);
+      await getUserData(token);
+    } catch (error) {
+      console.error("Error updating user name:", error);
+    }
   };
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const openModal = () => {
-    dispatch(setNewUserName(""));
+    setNewUserName("");
     setIsModalOpen(true);
   };
 
@@ -50,8 +55,8 @@ function Header() {
     closeModal();
   };
 
-  const handleNewUserName = (e) => {
-    dispatch(setNewUserName(e.target.value));
+  const handleNewUserName = (value) => {
+    setNewUserName(value);
   };
 
   return (

@@ -23,6 +23,7 @@ const Layout = ({ children }) => {
             className="main-nav-logo-image"
             src={Logo}
             alt="Argent Bank Logo"
+            onClick={handleAuthClick}
           />
           <h1 className="sr-only">Argent Bank</h1>
         </Link>

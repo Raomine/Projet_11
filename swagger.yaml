@@ -241,9 +241,11 @@ definitions:
   AccountUpdate:
     type: object
     properties:
-      title:
+      date:
         type: string
       amount:
         type: string
       description:
+        type: string 
+      balance:
         type: string
